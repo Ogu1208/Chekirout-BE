@@ -10,6 +10,7 @@ import com.sch.chekirout.user.exception.TokenNotFoundException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -29,6 +30,9 @@ public class EmailService {
     private final EmailVerificationTokenRepository tokenRepository;
     private final UserRepository userRepository;
 
+    @Value("${EMAIL_ADDRESS}")
+    private String emailAddress;
+
     @Async
     public void sendVerificationEmail(String recipientEmail) {
 
@@ -46,7 +50,7 @@ public class EmailService {
             helper.setTo(recipientEmail);  // 수신자 이메일 설정
             helper.setSubject(subject);    // 이메일 제목 설정
             helper.setText(message, true); // HTML 형식으로 본문 설정
-            helper.setFrom("chekirout <juheun9912@gmail.com>");
+            helper.setFrom("chekirout <"+emailAddress+">");
 
             mailSender.send(email);  // 이메일 전송
         } catch (Exception e) {

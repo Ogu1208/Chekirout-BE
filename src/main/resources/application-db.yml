@@ -24,8 +24,8 @@ spring:
             enable: true
 
 jwt:
-  issuer: juheun9912@gmail.com
-  secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+  issuer: ${JWT_ISSUER}
+  secret_key: ${JWT_SECRET_KEY}
 
 
 

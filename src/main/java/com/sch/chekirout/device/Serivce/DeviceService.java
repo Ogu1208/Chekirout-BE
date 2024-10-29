@@ -31,7 +31,7 @@ public class DeviceService {
 
 
 
-    public void validateDevice(User user, HttpServletRequest request) throws DeviceNotFoundException, DeviceNotMatchException {
+    public void validateDevice(User user, HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
         String currentDeviceInfo = UserAgentUtil.extractDeviceInfo(userAgent);
 

@@ -121,7 +121,7 @@ public class AuthController {
 
     // 2. 새로운 로그인 인증 엔드포인트
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest, HttpServletRequest request) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         UserDetails userDetails;
 
@@ -148,9 +148,6 @@ public class AuthController {
 
         final String accessToken = jwtTokenUtil.generateToken(userDetails);
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
-
-
-
 
         Map<String, String> response = new HashMap<>();
         response.put("accessToken", accessToken);

@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         // 학번이 8자리 숫자인지 확인
         if (!username.matches("^[0-9]{8}$")) {
             throw new UsernameNotFoundException("Invalid username format. Username should be an 8-digit student number.");
@@ -51,9 +51,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         // 디바이스 검증 로직 호출
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         deviceService.validateDevice(user, request);
-
-
-
 
         // 사용자의 권한 설정
         List<GrantedAuthority> authorities = new ArrayList<>();

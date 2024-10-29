@@ -29,6 +29,13 @@ jwt:
 
 
 
+program:
+  target-latitude: ${TARGET_LATITUDE}
+  target-longitude: ${TARGET_LONGITUDE}
+  max-distance-meters: ${MAX_DISTANCE_METERS}
+  start-time-window-minutes: ${START_TIME_WINDOW_MINUTES}
+  end-time-window-minutes: ${END_TIME_WINDOW_MINUTES}
+
 --- # db-local
 spring:
   config:

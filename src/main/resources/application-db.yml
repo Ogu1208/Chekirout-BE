@@ -14,8 +14,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: juheun9912@gmail.com
-    password: haqx afaq vypv obre
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -24,10 +24,15 @@ spring:
             enable: true
 
 jwt:
-  issuer: juheun9912@gmail.com
-  secret_key: chekirout-secret_key9912-tlawngmsdlqlek
+  issuer: ${JWT_ISSUER}
+  secret_key: ${JWT_SECRET_KEY}
 
-
+program:
+  target-latitude: ${TARGET_LATITUDE}
+  target-longitude: ${TARGET_LONGITUDE}
+  max-distance-meters: ${MAX_DISTANCE_METERS}
+  start-time-window-minutes: ${START_TIME_WINDOW_MINUTES}
+  end-time-window-minutes: ${END_TIME_WINDOW_MINUTES}
 
 --- # db-local
 spring:
@@ -72,7 +77,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-
-
-
-

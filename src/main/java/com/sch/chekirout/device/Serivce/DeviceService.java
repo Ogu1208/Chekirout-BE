@@ -26,12 +26,10 @@ public class DeviceService {
     public Optional<UserDevice> findDeviceByUserId(Long userId) {
         return userDeviceRepository.findByUserId(userId);
     }
-
-
+    
     public void saveOrUpdateDevice(UserDevice device) {
         userDeviceRepository.save(device);
     }
-
 
     public void validateDevice(User user, HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");

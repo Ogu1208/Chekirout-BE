@@ -3,6 +3,7 @@ package com.sch.chekirout.program.application;
 import com.sch.chekirout.participation.domain.ParticipationRecord;
 import com.sch.chekirout.participation.domain.repository.ParticipationRecordRepository;
 import com.sch.chekirout.program.application.dto.request.ProgramParticipationRequest;
+import com.sch.chekirout.program.config.ProgramProperties;
 import com.sch.chekirout.program.domain.Program;
 import com.sch.chekirout.program.domain.repository.ProgramRepository;
 import com.sch.chekirout.program.exception.AlreadyParticipatedException;
@@ -13,6 +14,7 @@ import com.sch.chekirout.stampCard.application.StampCardService;
 import com.sch.chekirout.stampCard.domain.StampCard;
 import com.sch.chekirout.user.domain.User;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +29,7 @@ public class ProgramParticipationService {
     private final ParticipationRecordRepository participationRecordRepository;
     private final CategoryService categoryService;
     private final StampCardService stampCardService;
-
-    // 기준 좌표 (예시: 36.76836177815623, 126.92743693790044)
-    private static final double TARGET_LATITUDE = 36.76836177815623;
-    private static final double TARGET_LONGITUDE = 126.92743693790044;
-    private static final double MAX_DISTANCE_METERS = 110.0;  // 110m 이내
-    private static final int START_TIME_WINDOW_MINUTES = 10;  // 프로그램 시작 10분 전
-    private static final int END_TIME_WINDOW_MINUTES = 10;    // 프로그램 종료 10분 후
+    private final ProgramProperties programProperties;
 
     @Transactional
     public void participateInProgram(User user, String programId, ProgramParticipationRequest request) {
@@ -83,8 +79,8 @@ public class ProgramParticipationService {
      * @param participationTime
      */
     private void validateParticipationTime(Program program, LocalDateTime participationTime) {
-        LocalDateTime startWindow = program.getStartTimestamp().minusMinutes(START_TIME_WINDOW_MINUTES);
-        LocalDateTime endWindow = program.getEndTimestamp().plusMinutes(END_TIME_WINDOW_MINUTES);
+        LocalDateTime startWindow = program.getStartTimestamp().minusMinutes(programProperties.getStartTimeWindowMinutes());
+        LocalDateTime endWindow = program.getEndTimestamp().plusMinutes(programProperties.getEndTimeWindowMinutes());
 
         if (participationTime.isBefore(startWindow) || participationTime.isAfter(endWindow)) {
             throw new ProgramTimeWindowException();
@@ -97,7 +93,8 @@ public class ProgramParticipationService {
      * @param longitude
      */
     private void validateParticipationLocation(double latitude, double longitude) {
-        if (!isWithinRange(latitude, longitude, TARGET_LATITUDE, TARGET_LONGITUDE, MAX_DISTANCE_METERS)) {
+        if (!isWithinRange(latitude, longitude, programProperties.getTargetLatitude(),
+                programProperties.getTargetLongitude(), programProperties.getMaxDistanceMeters())) {
             throw new DistanceOutOfRangeException();
         }
     }

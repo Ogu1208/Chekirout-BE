@@ -2,6 +2,7 @@ package com.sch.chekirout.common.config;
 
 
 import com.sch.chekirout.auth.exception.CustomAccessDeniedHandler;
+import com.sch.chekirout.auth.exception.CustomAuthenticationEntryPoint;
 import com.sch.chekirout.auth.jwt.filter.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
@@ -49,6 +51,7 @@ public class SecurityConfig {
 
         http.exceptionHandling(exceptionHandling ->
                 exceptionHandling
+//                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)
         );
 

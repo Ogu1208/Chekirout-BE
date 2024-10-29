@@ -16,6 +16,4 @@ public abstract class CustomBadRequestException extends RuntimeException {
         super(message, cause);
         this.errorCode = errorCode;
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.sch.chekirout.auth.presentation;
 
 
 
+import com.sch.chekirout.common.exception.CustomAuthenticationException;
 import com.sch.chekirout.device.Serivce.DeviceService;
 import com.sch.chekirout.device.domain.UserDevice;
 import com.sch.chekirout.device.util.DeviceInfoUtil;

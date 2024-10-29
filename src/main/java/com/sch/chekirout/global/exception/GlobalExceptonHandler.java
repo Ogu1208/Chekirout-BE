@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -125,5 +126,34 @@ public class GlobalExceptonHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);  // 400 Bad Request
     }
 
+    @ExceptionHandler(value = {InternalAuthenticationServiceException.class})
+    public ResponseEntity<ErrorResponse> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException exception) {
+        Throwable cause = exception.getCause();
 
+        // CustomAuthenticationException이 원인인 경우에 한해 400으로 응답
+        if (cause instanceof CustomAuthenticationException) {
+            CustomAuthenticationException customException = (CustomAuthenticationException) cause;
+
+            ErrorResponse errorResponse = new ErrorResponse(
+                    customException.getMessage(),
+                    customException.getErrorCode(),
+                    customException.getErrorCode().getCode()
+            );
+
+            log.error("CustomAuthenticationException 발생: {}", customException.getMessage());
+
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        // 그 외 InternalAuthenticationServiceException
+        log.error("예상치 못한 인증 오류: {}", exception.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                INTERNAL_SERVER_ERROR.getMessage(),
+                INTERNAL_SERVER_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR.value()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -2,6 +2,7 @@ package com.sch.chekirout.auth.application;
 
 
 
+import com.sch.chekirout.common.exception.CustomAuthenticationException;
 import com.sch.chekirout.device.Serivce.DeviceService;
 import com.sch.chekirout.user.domain.User;
 import com.sch.chekirout.user.domain.Repository.UserRepository;
@@ -9,6 +10,7 @@ import com.sch.chekirout.user.exception.EmailNotVerifiedException;
 import com.sch.chekirout.user.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,7 +52,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 디바이스 검증 로직 호출
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        deviceService.validateDevice(user, request);
+        try {
+            deviceService.validateDevice(user, request);
+        } catch (CustomAuthenticationException e) {
+            // AuthenticationException으로 예외를 다시 던져 AuthenticationEntryPoint로 이동
+            throw new AuthenticationCredentialsNotFoundException(e.getMessage(), e);
+        }
 
         // 사용자의 권한 설정
         List<GrantedAuthority> authorities = new ArrayList<>();

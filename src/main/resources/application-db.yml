@@ -27,8 +27,6 @@ jwt:
   issuer: ${JWT_ISSUER}
   secret_key: ${JWT_SECRET_KEY}
 
-
-
 program:
   target-latitude: ${TARGET_LATITUDE}
   target-longitude: ${TARGET_LONGITUDE}
@@ -79,7 +77,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-
-
-
-

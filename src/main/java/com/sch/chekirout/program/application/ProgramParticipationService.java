@@ -31,13 +31,6 @@ public class ProgramParticipationService {
     private final StampCardService stampCardService;
     private final ProgramProperties programProperties;
 
-    // 기준 좌표 (예시: 36.76836177815623, 126.92743693790044)
-//    private static final double TARGET_LATITUDE = 36.76836177815623;
-//    private static final double TARGET_LONGITUDE = 126.92743693790044;
-//    private static final double MAX_DISTANCE_METERS = 110.0;  // 110m 이내
-//    private static final int START_TIME_WINDOW_MINUTES = 10;  // 프로그램 시작 10분 전
-//    private static final int END_TIME_WINDOW_MINUTES = 10;    // 프로그램 종료 10분 후
-
     @Transactional
     public void participateInProgram(User user, String programId, ProgramParticipationRequest request) {
 
